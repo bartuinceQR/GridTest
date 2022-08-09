@@ -2,22 +2,20 @@ using UnityEngine;
 
 public class HandleClick : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (MainController.Instance.GetInput())
         {
-            SendClickRay(true);
-        } else if (Input.GetMouseButtonDown(1)) //debug
-        {
-            SendClickRay(false);
-        } 
+            if (Input.GetMouseButtonDown(0))
+            {
+                SendClickRay(true);
+            }
+            else if (Input.GetMouseButtonDown(1)) //debug
+            {
+                SendClickRay(false);
+            }
+        }
     }
 
     void SendClickRay(bool isSetter)
@@ -30,9 +28,11 @@ public class HandleClick : MonoBehaviour
             GridElement element = hit.transform.GetComponent<GridElement>();
             if (element != null)
             {
-                element.SetTexture(isSetter);
+                if (isSetter)
+                    element.Enable();
+                else
+                    element.Disable();
             }
-            Debug.Log("ooo");
         }
     }
     

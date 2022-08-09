@@ -4,6 +4,8 @@ public class GridElement : MonoBehaviour
 {
     public int row;
     public int col;
+
+    private GridHandler _gridHandler;
     
     [SerializeField] private Sprite EmptyImage;
     [SerializeField] private Sprite ClickedImage;
@@ -24,11 +26,36 @@ public class GridElement : MonoBehaviour
         col = y;
     }
 
-    public void SetTexture(bool isSet)
+    public void Enable()
     {
-        _spriteRenderer.sprite = isSet ? ClickedImage : EmptyImage;
-        state = isSet ? GridState.Enabled : GridState.Disabled;
+        if (state == GridState.Enabled) return;
+        _spriteRenderer.sprite = ClickedImage;
+        state = GridState.Enabled;
+        
+        Debug.Log(GetCoordinates());
 
+        _gridHandler.TileEnabled(row, col);
+    }
+    
+    public void Disable()
+    {
+        _spriteRenderer.sprite = EmptyImage;
+        state = GridState.Disabled;
+    }
+
+    public void SetGrid(GridHandler grid)
+    {
+        _gridHandler = grid;
+    }
+
+    public GridState GetState()
+    {
+        return state;
+    }
+
+    public Vector2 GetCoordinates()
+    {
+        return new(row, col);
     }
 
     public enum GridState
